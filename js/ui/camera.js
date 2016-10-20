@@ -593,7 +593,7 @@ class Camera extends Evented {
         const startWorldSize = tr.worldSize;
         let rho = options.curve;
 
-            // w₀: Initial visible span, measured in pixels at the initial scale.
+        // w₀: Initial visible span, measured in pixels at the initial scale.
         const w0 = Math.max(tr.width, tr.height),
             // w₁: Final visible span, measured in pixels with respect to the initial scale.
             w1 = w0 / scale,
@@ -603,8 +603,7 @@ class Camera extends Evented {
 
         if ('minZoom' in options) {
             const minZoom = util.clamp(Math.min(options.minZoom, startZoom, zoom), tr.minZoom, tr.maxZoom);
-            // w<sub>m</sub>: Maximum visible span, measured in pixels with respect to the initial
-            // scale.
+            // w<sub>m</sub>: Maximum visible span, measured in pixels with respect to the initial scale.
             const wMax = w0 / tr.zoomScale(minZoom - startZoom);
             rho = Math.sqrt(wMax / u1 * 2);
         }
@@ -653,8 +652,7 @@ class Camera extends Evented {
         if (Math.abs(u1) < 0.000001) {
             // Perform a more or less instantaneous transition if the path is too short.
             if (Math.abs(w0 - w1) < 0.000001) {
-                this.easeTo(options, eventData);
-                return;
+                return this.easeTo(options, eventData);
             }
 
             const k = w1 < w0 ? -1 : 1;
