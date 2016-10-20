@@ -226,15 +226,6 @@ module.exports = DragRotateHandler;
  */
 
 /**
- * Fired repeatedly during a "drag to rotate" interaction. See [`DragRotateHandler`](#DragRotateHandler).
- *
- * @event rotate
- * @memberof Map
- * @instance
- * @property {MapMouseEvent | MapTouchEvent} data
- */
-
-/**
  * Fired when a "drag to rotate" interaction ends. See [`DragRotateHandler`](#DragRotateHandler).
  *
  * @event rotateend

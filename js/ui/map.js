@@ -3,7 +3,6 @@
 const util = require('../util/util');
 const browser = require('../util/browser');
 const window = require('../util/window');
-const Evented = require('../util/evented');
 const DOM = require('../util/dom');
 
 const Style = require('../style/style');
@@ -125,17 +124,18 @@ const defaultOptions = {
  * });
  * @see [Display a map](https://www.mapbox.com/mapbox-gl-js/examples/)
  */
-class Map extends Evented {
+class Map extends Camera {
 
     constructor(options) {
-        super();
         options = util.extend({}, defaultOptions, options);
+
+        const transform = new Transform(options.minZoom, options.maxZoom);
+        super(transform, options);
 
         this._interactive = options.interactive;
         this._failIfMajorPerformanceCaveat = options.failIfMajorPerformanceCaveat;
         this._preserveDrawingBuffer = options.preserveDrawingBuffer;
         this._trackResize = options.trackResize;
-        this._bearingSnap = options.bearingSnap;
 
         if (typeof options.container === 'string') {
             this._container = window.document.getElementById(options.container);
@@ -144,7 +144,6 @@ class Map extends Evented {
         }
 
         this.animationLoop = new AnimationLoop();
-        this.transform = new Transform(options.minZoom, options.maxZoom);
 
         if (options.maxBounds) {
             this.setMaxBounds(options.maxBounds);
@@ -1209,8 +1208,6 @@ class Map extends Evented {
     set vertices(value) { this._vertices = value; this._update(); }
 }
 
-util.extend(Map.prototype, Camera.prototype);
-
 module.exports = Map;
 
 function removeNode(node) {
@@ -1396,38 +1393,6 @@ function removeNode(node) {
  * @see [Draw GeoJSON points](https://www.mapbox.com/mapbox-gl-js/example/geojson-markers/)
  * @see [Add live realtime data](https://www.mapbox.com/mapbox-gl-js/example/live-geojson/)
  * @see [Animate a point](https://www.mapbox.com/mapbox-gl-js/example/animate-point-along-line/)
- */
-
-/**
- * Fired just before the map begins a transition from one
- * view to another, as the result of either user interaction or methods such as [Map#jumpTo](#Map#jumpTo).
- *
- * @event movestart
- * @memberof Map
- * @instance
- * @property {{originalEvent: DragEvent}} data
- */
-
-/**
- * Fired repeatedly during an animated transition from one view to
- * another, as the result of either user interaction or methods such as [Map#flyTo](#Map#flyTo).
- *
- * @event move
- * @memberof Map
- * @instance
- * @property {MapMouseEvent | MapTouchEvent} data
- */
-
-/**
- * Fired just after the map completes a transition from one
- * view to another, as the result of either user interaction or methods such as [Map#jumpTo](#Map#jumpTo).
- *
- * @event moveend
- * @memberof Map
- * @instance
- * @property {{originalEvent: DragEvent}} data
- * @see [Play map locations as a slideshow](https://www.mapbox.com/mapbox-gl-js/example/playback-locations/)
- * @see [Filter features within map view](https://www.mapbox.com/mapbox-gl-js/example/filter-features-within-map-view/)
  */
 
  /**
